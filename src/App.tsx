@@ -13,6 +13,7 @@ import { CompaniesView } from './views/CompaniesView';
 import { TeamView } from './views/TeamView';
 import { ReportsView } from './views/ReportsView';
 import { SettingsView } from './views/SettingsView';
+import { ChatView } from './views/ChatView';
 import { LandingView } from './views/LandingView';
 import { supabase } from './lib/supabase';
 import type { Budget, BudgetItem, BudgetStatus, Company, Profile } from './types';
@@ -255,6 +256,7 @@ function AppInner() {
           />
         )}
         {view === 'settings' && <SettingsView />}
+        {view === 'chat' && <ChatView />}
       </main>
 
       {toast && (

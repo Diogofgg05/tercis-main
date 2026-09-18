@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard, FileText, BookOpen, Building2, Users,
   BarChart3, Settings, LogOut, Zap, ChevronRight,
-  TrendingUp, Bell, HelpCircle, Menu, ChevronLeft,
+  TrendingUp, Bell, HelpCircle, Menu, ChevronLeft, MessageCircle, Workflow,
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import type { UserRole } from '../types';
 
-export type View = 'dashboard' | 'budgets' | 'editor' | 'catalog' | 'companies' | 'team' | 'reports' | 'settings';
+export type View = 'dashboard' | 'budgets' | 'editor' | 'catalog' | 'companies' | 'team' | 'reports' | 'settings' | 'chat';
 
 interface Props {
   current: View;
@@ -45,6 +45,7 @@ export function Sidebar({ current, onChange, budgetCount = 0 }: Props) {
   const NAV: NavItem[] = [
     { id: 'dashboard', label: 'Painel', icon: <LayoutDashboard size={18} />, roles: ['admin', 'collaborator', 'client'] },
     { id: 'budgets', label: 'Orçamentos', icon: <FileText size={18} />, roles: ['admin', 'collaborator', 'client'], badge: budgetCount > 0 ? budgetCount : undefined },
+    { id: 'chat', label: 'Chat da equipa', icon: <MessageCircle size={18} />, roles: ['admin', 'collaborator', 'client'], badge: 3 },
     { id: 'companies', label: role === 'client' ? 'A minha empresa' : 'Empresas', icon: <Building2 size={18} />, roles: ['admin', 'collaborator', 'client'] },
     { id: 'catalog', label: 'Catálogo', icon: <BookOpen size={18} />, roles: ['admin', 'collaborator'] },
     { id: 'reports', label: 'Relatórios', icon: <BarChart3 size={18} />, roles: ['admin', 'client'] },
@@ -56,7 +57,7 @@ export function Sidebar({ current, onChange, budgetCount = 0 }: Props) {
   const initials = profile?.full_name?.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase() ?? '?';
 
   const groups = [
-    { label: 'Principal', items: visible.filter(n => ['dashboard', 'budgets'].includes(n.id)) },
+    { label: 'Principal', items: visible.filter(n => ['dashboard', 'budgets', 'chat'].includes(n.id)) },
     { label: 'Gestão', items: visible.filter(n => ['companies', 'catalog'].includes(n.id)) },
     { label: 'Analytics', items: visible.filter(n => ['reports', 'team'].includes(n.id)) },
     { label: 'Sistema', items: visible.filter(n => ['settings'].includes(n.id)) },
@@ -77,8 +78,8 @@ export function Sidebar({ current, onChange, budgetCount = 0 }: Props) {
       {/* Sidebar */}
       <aside className={`
         fixed lg:sticky top-0 z-50 h-screen
-        bg-slate-950 border-r border-white/5
-        flex flex-col transition-all duration-300 ease-in-out
+        bg-white border-r border-slate-200/80 shadow-[4px_0_24px_rgba(15,23,42,0.04)]
+        flex flex-col transition-all duration-300 ease-in-out tercis-sidebar
         ${isCollapsed ? 'w-20' : 'w-64'}
         ${isCollapsed ? '-translate-x-full lg:translate-x-0' : 'translate-x-0'}
       `}>
@@ -91,8 +92,8 @@ export function Sidebar({ current, onChange, budgetCount = 0 }: Props) {
                   <Zap size={16} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-bold text-white text-sm leading-tight">tercis</p>
-                  <p className="text-slate-600 text-[10px] font-medium mt-0.5">Operations OS</p>
+                  <p className="font-bold text-slate-900 text-sm leading-tight">tercis</p>
+                  <p className="text-slate-400 text-[10px] font-medium mt-0.5">Operations OS</p>
                 </div>
               </div>
               <button

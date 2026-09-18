@@ -55,6 +55,17 @@
     @apply text-2xl font-black text-slate-900 tracking-tight;
   }
 
+  .tercis-sidebar .text-white { color: #0f172a; }
+  .tercis-sidebar .text-slate-400 { color: #64748b; }
+  .tercis-sidebar .text-slate-500 { color: #94a3b8; }
+  .tercis-sidebar .text-slate-600 { color: #94a3b8; }
+  .tercis-sidebar .text-slate-800 { color: #334155; }
+  .tercis-sidebar .bg-slate-800 { background-color: #f1f5f9; }
+  .tercis-sidebar .bg-slate-700 { background-color: #e2e8f0; color: #475569; }
+  .tercis-sidebar .text-red-400 { color: #be123c; }
+  .tercis-sidebar .text-slate-800 { color: #334155; }
+  .tercis-sidebar .text-slate-600 { color: #64748b; }
+
   .table-header {
     @apply px-4 py-3 text-left text-[10px] font-bold uppercase tracking-widest text-slate-400;
   }
