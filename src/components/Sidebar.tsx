@@ -18,9 +18,9 @@ interface Props {
 interface NavItem { id: View; label: string; icon: React.ReactNode; roles: UserRole[]; badge?: number }
 
 const ROLE_LABELS: Record<UserRole, string> = {
-  admin: 'Administrador',
+  admin: 'Super admin',
   collaborator: 'Colaborador',
-  client: 'Cliente',
+  client: 'Admin empresa',
 };
 
 const ROLE_COLORS: Record<UserRole, string> = {
@@ -91,8 +91,8 @@ export function Sidebar({ current, onChange, budgetCount = 0 }: Props) {
                   <Zap size={16} className="text-white" />
                 </div>
                 <div>
-                  <p className="font-bold text-white text-sm leading-tight">QuadroElétrico</p>
-                  <p className="text-slate-600 text-[10px] font-medium mt-0.5">Gestão de Orçamentos</p>
+                  <p className="font-bold text-white text-sm leading-tight">tercis</p>
+                  <p className="text-slate-600 text-[10px] font-medium mt-0.5">Operations OS</p>
                 </div>
               </div>
               <button

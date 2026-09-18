@@ -39,8 +39,8 @@ export function LoginView() {
             <Zap size={20} className="text-white" />
           </div>
           <div>
-            <p className="text-white font-bold text-lg">QuadroElétrico</p>
-            <p className="text-blue-400 text-xs">Plataforma de Orçamentos</p>
+            <p className="text-white font-bold text-lg">tercis</p>
+            <p className="text-blue-400 text-xs">Operations OS</p>
           </div>
         </div>
 

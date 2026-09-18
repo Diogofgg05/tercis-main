@@ -13,6 +13,7 @@ import { CompaniesView } from './views/CompaniesView';
 import { TeamView } from './views/TeamView';
 import { ReportsView } from './views/ReportsView';
 import { SettingsView } from './views/SettingsView';
+import { LandingView } from './views/LandingView';
 import { supabase } from './lib/supabase';
 import type { Budget, BudgetItem, BudgetStatus, Company, Profile } from './types';
 import { calcItem } from './calc';
@@ -268,6 +269,7 @@ function AppInner() {
 // ----------------------------------------------
 function AppRoot() {
   const { session, loading } = useAuth();
+  const [showLogin, setShowLogin] = useState(false);
 
   if (loading) {
     return (
@@ -280,7 +282,7 @@ function AppRoot() {
     );
   }
 
-  if (!session) return <LoginView />;
+  if (!session) return showLogin ? <LoginView /> : <LandingView onLogin={() => setShowLogin(true)} />;
   return <AppInner />;
 }
 
