@@ -263,7 +263,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ budgets: propBudgets, comp
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-black text-slate-900">{greeting}, {profile?.full_name?.split(' ')[0] || 'utilizador'}</h1>
-            <p className="text-slate-500 text-sm mt-0.5">Os seus orçamentos estão aqui</p>
+            <p className="text-slate-500 text-sm mt-0.5">Acompanhe a operação da sua empresa num só lugar</p>
           </div>
           <button onClick={onNew} className="btn-primary">
             <Plus size={16} />

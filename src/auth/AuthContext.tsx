@@ -85,7 +85,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   async function signIn(email: string, password: string): Promise<string | null> {
     if (!isSupabaseConfigured) {
       const demoProfile = getDemoProfile(email, password);
-      if (!demoProfile) return `Credenciais demo inválidas. Use admin@tercis.pt, tecnico@tercis.pt ou cliente@tercis.pt com a senha ${DEMO_PASSWORD}.`;
+      if (!demoProfile) return `Credenciais demo inválidas. Use o Super admin, Colaborador ou Admin da empresa com a senha ${DEMO_PASSWORD}.`;
       localStorage.setItem(DEMO_SESSION_KEY, demoProfile.id);
       setProfile(demoProfile);
       setSession(demoSessionFor(demoProfile));

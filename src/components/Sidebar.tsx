@@ -20,7 +20,7 @@ interface NavItem { id: View; label: string; icon: React.ReactNode; roles: UserR
 const ROLE_LABELS: Record<UserRole, string> = {
   admin: 'Super admin',
   collaborator: 'Colaborador',
-  client: 'Admin empresa',
+  client: 'Admin da empresa',
 };
 
 const ROLE_COLORS: Record<UserRole, string> = {
@@ -45,11 +45,11 @@ export function Sidebar({ current, onChange, budgetCount = 0 }: Props) {
   const NAV: NavItem[] = [
     { id: 'dashboard', label: 'Painel', icon: <LayoutDashboard size={18} />, roles: ['admin', 'collaborator', 'client'] },
     { id: 'budgets', label: 'Orçamentos', icon: <FileText size={18} />, roles: ['admin', 'collaborator', 'client'], badge: budgetCount > 0 ? budgetCount : undefined },
-    { id: 'companies', label: 'Empresas', icon: <Building2 size={18} />, roles: ['admin', 'collaborator'] },
+    { id: 'companies', label: role === 'client' ? 'A minha empresa' : 'Empresas', icon: <Building2 size={18} />, roles: ['admin', 'collaborator', 'client'] },
     { id: 'catalog', label: 'Catálogo', icon: <BookOpen size={18} />, roles: ['admin', 'collaborator'] },
-    { id: 'reports', label: 'Relatórios', icon: <BarChart3 size={18} />, roles: ['admin'] },
-    { id: 'team', label: 'Equipa', icon: <Users size={18} />, roles: ['admin'] },
-    { id: 'settings', label: 'Definições', icon: <Settings size={18} />, roles: ['admin', 'collaborator'] },
+    { id: 'reports', label: 'Relatórios', icon: <BarChart3 size={18} />, roles: ['admin', 'client'] },
+    { id: 'team', label: role === 'client' ? 'A minha equipa' : 'Equipa', icon: <Users size={18} />, roles: ['admin', 'client'] },
+    { id: 'settings', label: 'Definições', icon: <Settings size={18} />, roles: ['admin', 'collaborator', 'client'] },
   ];
 
   const visible = NAV.filter((n) => n.roles.includes(role));
