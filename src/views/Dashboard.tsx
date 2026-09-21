@@ -163,8 +163,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ budgets: propBudgets, comp
   const isAdmin = profile?.role === 'admin' || !profile?.role;
   const isClient = profile?.role === 'client';
 
-  const budgets = propBudgets && propBudgets.length > 0 ? propBudgets : MOCK_BUDGETS;
-  const companies = propCompanies && propCompanies.length > 0 ? propCompanies : MOCK_COMPANIES;
+  const budgets = propBudgets ?? [];
+  const companies = propCompanies ?? [];
 
   const filteredBudgets = useMemo(() => {
     if (isAdmin || !profile) return budgets;

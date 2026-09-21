@@ -255,7 +255,13 @@ function AppInner() {
             team={team}
           />
         )}
-        {view === 'settings' && <SettingsView />}
+        {view === 'settings' && (
+          <SettingsView
+            budgets={budgets}
+            companies={companies}
+            team={team}
+          />
+        )}
         {view === 'chat' && <ChatView />}
       </main>
 
