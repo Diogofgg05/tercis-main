@@ -1,7 +1,7 @@
 // -------------------------------------------------------
 // Auth & Users
 // -------------------------------------------------------
-export type UserRole = 'admin' | 'collaborator' | 'client';
+export type UserRole = 'super_admin' | 'admin' | 'collaborator' | 'client';
 
 export interface Profile {
   id: string;

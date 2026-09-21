@@ -15,8 +15,8 @@ import { ReportsView } from './views/ReportsView';
 import { SettingsView } from './views/SettingsView';
 import { ChatView } from './views/ChatView';
 import { LandingView } from './views/LandingView';
-import { supabase } from './lib/supabase';
-import type { Budget, BudgetItem, BudgetStatus, Company, Profile } from './types';
+import type { Budget, BudgetStatus, Company, Profile } from './types';
+import { DEMO_BUDGETS, DEMO_COMPANIES, DEMO_PROFILES, hydrateDemoBudget } from './demoData';
 import { calcItem } from './calc';
 
 // ----------------------------------------------
@@ -65,29 +65,19 @@ function AppInner() {
   const notify = useCallback((message: string, type: ToastType = 'success') => setToast({ message, type }), []);
 
   // -- Load data ------------------------------
-  async function loadBudgets() {
-    const { data } = await supabase
-      .from('budgets')
-      .select('*, company:companies(id,name,sector,city,email,phone), assignee:profiles!budgets_assigned_to_fkey(id,full_name,email,role), creator:profiles!budgets_created_by_fkey(id,full_name)')
-      .order('created_at', { ascending: false });
-    if (data) setBudgets(data as Budget[]);
+  function loadBudgets() {
+    const saved = localStorage.getItem('tercis_budgets');
+    setBudgets(saved ? JSON.parse(saved) : DEMO_BUDGETS.map(hydrateDemoBudget));
   }
 
-  async function loadCompanies() {
-    const { data } = await supabase.from('companies').select('*').eq('active', true).order('name');
-    if (data) setCompanies(data as Company[]);
+  function loadCompanies() {
+    const saved = localStorage.getItem('tercis_companies');
+    setCompanies(saved ? JSON.parse(saved) : DEMO_COMPANIES);
   }
 
-  async function loadTeam() {
-    const { data } = await supabase.from('profiles').select('*').eq('active', true).order('full_name');
-    if (data) setTeam(data as Profile[]);
-  }
+  function loadTeam() { setTeam(DEMO_PROFILES); }
 
-  useEffect(() => {
-    loadBudgets();
-    loadCompanies();
-    loadTeam();
-  }, []);
+  useEffect(() => { loadBudgets(); loadCompanies(); loadTeam(); }, []);
 
   // -- Budget CRUD ----------------------------
   async function handleSave() {
@@ -95,29 +85,13 @@ function AppInner() {
     if (!activeBudget.name.trim()) { notify('Indique uma designação para o orçamento.', 'error'); return; }
     setSaving(true);
     try {
-      const { items, company, assignee, creator, ...budgetData } = activeBudget as any;
-      // Upsert budget
-      const { error: budgetError } = await supabase.from('budgets').upsert({
-        ...budgetData,
-        created_by: budgetData.created_by ?? profile.id,
-      });
-      if (budgetError) throw budgetError;
-
-      // Replace all items
-      await supabase.from('budget_items').delete().eq('budget_id', activeBudget.id);
-      if (activeBudget.items && activeBudget.items.length > 0) {
-        const rows = activeBudget.items.map((item: BudgetItem, idx: number) => ({
-          ...item,
-          budget_id: activeBudget.id,
-          sort_order: idx,
-          id: item.id || newId(),
-        }));
-        const { error: itemError } = await supabase.from('budget_items').insert(rows);
-        if (itemError) throw itemError;
-      }
-
+      const nextBudget = hydrateDemoBudget({ ...activeBudget, created_by: activeBudget.created_by ?? profile.id, updated_at: new Date().toISOString() });
+      const next = budgets.some((item) => item.id === nextBudget.id)
+        ? budgets.map((item) => item.id === nextBudget.id ? nextBudget : item)
+        : [nextBudget, ...budgets];
+      setBudgets(next);
+      localStorage.setItem('tercis_budgets', JSON.stringify(next));
       setUnsaved(false);
-      await loadBudgets();
       notify('Orçamento guardado.');
     } catch (e: any) {
       notify(e.message ?? 'Erro ao guardar.', 'error');
@@ -127,13 +101,7 @@ function AppInner() {
   }
 
   async function openBudget(b: Budget) {
-    // Load items
-    const { data: items } = await supabase
-      .from('budget_items')
-      .select('*')
-      .eq('budget_id', b.id)
-      .order('sort_order');
-    setActiveBudget({ ...b, items: (items as BudgetItem[]) ?? [] });
+    setActiveBudget({ ...b, items: b.items ?? [] });
     setUnsaved(false);
     setView('editor');
   }
@@ -165,13 +133,10 @@ function AppInner() {
   }
 
   async function deleteBudget(id: string) {
-    try {
-      await supabase.from('budgets').delete().eq('id', id);
-      await loadBudgets();
-      notify('Orçamento eliminado.', 'info');
-    } catch {
-      notify('Erro ao eliminar.', 'error');
-    }
+    const next = budgets.filter((budget) => budget.id !== id);
+    setBudgets(next);
+    localStorage.setItem('tercis_budgets', JSON.stringify(next));
+    notify('Orçamento eliminado.', 'info');
   }
 
   function handleBack() {

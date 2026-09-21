@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { Modal } from '../components/Modal';
-import { supabase } from '../lib/supabase';
 import { ALL_CATALOG_ITEMS, SECTORS } from '../data/catalog';
 import type { CatalogItem } from '../types';
 
@@ -603,7 +602,7 @@ export function CatalogView() {
       notes: formData.notes,
       is_custom: true,
     };
-    await supabase.from('custom_catalog_items').insert(newItem);
+    localStorage.setItem('tercis_catalog_custom', JSON.stringify(newItem));
     addCustomItems([newItem]);
     addToast('success', 'Componente adicionado.');
     setFormData(emptyForm);
@@ -643,7 +642,7 @@ export function CatalogView() {
       manufacturer: '', model: '', voltage: '', current: '', power: '',
       dimensions: '', weight: '', certifications: '', stock: undefined, location: '', notes: '',
     }));
-    await supabase.from('custom_catalog_items').insert(newItems);
+    localStorage.setItem('tercis_catalog_custom', JSON.stringify(newItems));
     addCustomItems(newItems);
     addToast('success', `${newItems.length} importados.`);
     setSelectedExt(new Set()); setExtResults([]); setExtQuery('');
@@ -722,14 +721,12 @@ export function CatalogView() {
   }, [filteredItems, addToast]);
 
   const handleDeleteItem = async (id: string) => {
-    await supabase.from('custom_catalog_items').delete().eq('id', id);
     removeCustomItems([id]);
     addToast('success', 'Item removido.');
   };
 
   const handleBatchDelete = async () => {
     const ids = Array.from(selectedItems);
-    await supabase.from('custom_catalog_items').delete().in('id', ids);
     removeCustomItems(ids);
     setSelectedItems(new Set());
     setConfirmBatchDelete(false);
