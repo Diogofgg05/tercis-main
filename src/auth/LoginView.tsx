@@ -163,7 +163,7 @@ export function LoginView() {
 
           <div className="mt-8 p-4 bg-slate-900 border border-slate-800 rounded-xl">
             <p className="text-slate-500 text-xs text-center">
-              O primeiro utilizador a registar-se torna-se automaticamente <strong className="text-slate-400">Administrador</strong>
+              Cada nova conta começa como <strong className="text-slate-400">Admin da empresa</strong>. Depois, pode convidar e gerir os seus colaboradores.
             </p>
           </div>
         </div>

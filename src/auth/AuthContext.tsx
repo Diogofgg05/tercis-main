@@ -101,7 +101,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         id: `demo-custom-${Date.now()}`,
         email,
         full_name: fullName,
-        role: 'collaborator',
+        role: 'admin',
         phone: '',
         avatar_url: '',
         company_id: null,
