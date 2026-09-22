@@ -15,7 +15,7 @@ import { ReportsView } from './views/ReportsView';
 import { SettingsView } from './views/SettingsView';
 import { ChatView } from './views/ChatView';
 import { LandingView } from './views/LandingView';
-import type { Budget, BudgetStatus, Company, Profile } from './types';
+import type { Budget, BudgetStatus, Company, Profile, BudgetAuditEntry } from './types';
 import { DEMO_BUDGETS, DEMO_COMPANIES, DEMO_PROFILES, hydrateDemoBudget } from './demoData';
 import { calcItem } from './calc';
 
@@ -151,6 +151,20 @@ function AppInner() {
     setUnsaved(true);
   }
 
+  function approveBudget(budget: Budget) {
+    if (!profile || !['admin', 'client'].includes(profile.role)) return;
+    const audit: BudgetAuditEntry = {
+      id: newId(), action: 'aprovado', actor_id: profile.id, actor_name: profile.full_name,
+      note: 'Orçamento validado pelo avaliador e entregue ao comercial.', created_at: new Date().toISOString(),
+    };
+    const next = budgets.map((item) => item.id === budget.id
+      ? { ...item, status: 'enviado' as BudgetStatus, audit_log: [...(item.audit_log ?? []), audit], updated_at: new Date().toISOString() }
+      : item);
+    setBudgets(next);
+    localStorage.setItem('tercis_budgets', JSON.stringify(next));
+    notify('Orçamento validado e entregue ao comercial.');
+  }
+
   const isEditor = view === 'editor';
 
   return (
@@ -180,6 +194,8 @@ function AppInner() {
             budgets={budgets}
             companies={companies}
             team={team}
+            onOpen={openBudget}
+            onApprove={approveBudget}
             onNew={openNew}
             onEdit={openBudget}
             onDelete={(id) => { if (confirm('Eliminar orçamento?')) deleteBudget(id); }}

@@ -58,11 +58,31 @@ export interface CatalogItem {
 // -------------------------------------------------------
 export type BudgetStatus =
   | 'rascunho'
+  | 'em_revisao'
   | 'enviado'
   | 'aprovado'
   | 'rejeitado'
+  | 'expirado'
   | 'em_execucao'
   | 'concluido';
+
+export interface BudgetAttachment {
+  id: string;
+  name: string;
+  size: number;
+  type: string;
+  dataUrl?: string;
+  uploaded_at: string;
+}
+
+export interface BudgetAuditEntry {
+  id: string;
+  action: 'criado' | 'enviado_revisao' | 'aprovado' | 'rejeitado' | 'entregue_comercial' | 'anexo_adicionado';
+  actor_id: string;
+  actor_name: string;
+  note?: string;
+  created_at: string;
+}
 
 export interface BudgetItem {
   id: string;
@@ -110,4 +130,8 @@ export interface Budget {
   created_at?: string;
   updated_at?: string;
   items?: BudgetItem[];
+  attachments?: BudgetAttachment[];
+  audit_log?: BudgetAuditEntry[];
+  approval_required?: boolean;
+  approver_ids?: string[];
 }
