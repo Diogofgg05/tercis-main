@@ -914,7 +914,21 @@ export function TeamView() {
   }, []);
 
   return (
-    <div className="p-6 sm:p-8 space-y-6 max-w-7xl mx-auto">
+    <div className="p-6 sm:p-8 space-y-6 max-w-7xl mx-auto animate-fade-in">
+      <section className="relative overflow-hidden rounded-[2rem] bg-slate-950 px-6 py-7 text-white shadow-xl shadow-slate-900/10 sm:px-8">
+        <div className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-orange-400/20 blur-3xl" />
+        <div className="relative flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">Workspace / Pessoas</p>
+            <h1 className="text-3xl font-black tracking-tight">A equipa por trás de cada orçamento.</h1>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-slate-300">Dê contexto, responsabilidade e velocidade a cada pessoa que participa no ciclo comercial.</p>
+          </div>
+          <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 backdrop-blur-sm">
+            <div className="flex -space-x-2"><span className="flex size-8 items-center justify-center rounded-full border-2 border-slate-950 bg-orange-400 text-[10px] font-black text-slate-950">CS</span><span className="flex size-8 items-center justify-center rounded-full border-2 border-slate-950 bg-white text-[10px] font-black text-slate-950">MO</span></div>
+            <div><p className="text-xs font-bold">Colaboração ativa</p><p className="text-[11px] text-slate-300">Permissões por função</p></div>
+          </div>
+        </div>
+      </section>
       {/* Toasts */}
       <div className="fixed bottom-6 right-6 z-50 space-y-2">
         {toasts.map((toast) => (
