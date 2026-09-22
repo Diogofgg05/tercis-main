@@ -18,15 +18,17 @@ interface Props {
 interface NavItem { id: View; label: string; icon: React.ReactNode; roles: UserRole[]; badge?: number }
 
 const ROLE_LABELS: Record<UserRole, string> = {
-  admin: 'Super admin',
+  super_admin: 'Super Admin',
+  admin: 'Admin da empresa',
   collaborator: 'Colaborador',
   client: 'Admin da empresa',
 };
 
 const ROLE_COLORS: Record<UserRole, string> = {
-  admin: 'bg-blue-500/20 text-blue-300',
-  collaborator: 'bg-emerald-500/20 text-emerald-300',
-  client: 'bg-amber-500/20 text-amber-300',
+  super_admin: 'bg-cyan-500/20 text-cyan-700',
+  admin: 'bg-blue-500/20 text-blue-700',
+  collaborator: 'bg-emerald-500/20 text-emerald-700',
+  client: 'bg-amber-500/20 text-amber-700',
 };
 
 export function Sidebar({ current, onChange, budgetCount = 0 }: Props) {
@@ -43,14 +45,14 @@ export function Sidebar({ current, onChange, budgetCount = 0 }: Props) {
   }, [isCollapsed]);
 
   const NAV: NavItem[] = [
-    { id: 'dashboard', label: 'Painel', icon: <LayoutDashboard size={18} />, roles: ['admin', 'collaborator', 'client'] },
-    { id: 'budgets', label: 'Orçamentos', icon: <FileText size={18} />, roles: ['admin', 'collaborator', 'client'], badge: budgetCount > 0 ? budgetCount : undefined },
-    { id: 'chat', label: 'Chat da equipa', icon: <MessageCircle size={18} />, roles: ['admin', 'collaborator', 'client'], badge: 3 },
-    { id: 'companies', label: role === 'client' ? 'A minha empresa' : 'Empresas', icon: <Building2 size={18} />, roles: ['admin', 'collaborator', 'client'] },
-    { id: 'catalog', label: 'Catálogo', icon: <BookOpen size={18} />, roles: ['admin', 'collaborator'] },
-    { id: 'reports', label: 'Relatórios', icon: <BarChart3 size={18} />, roles: ['admin', 'client'] },
-    { id: 'team', label: role === 'client' ? 'A minha equipa' : 'Equipa', icon: <Users size={18} />, roles: ['admin', 'client'] },
-    { id: 'settings', label: 'Definições', icon: <Settings size={18} />, roles: ['admin', 'collaborator', 'client'] },
+    { id: 'dashboard', label: 'Painel', icon: <LayoutDashboard size={18} />, roles: ['super_admin', 'admin', 'collaborator', 'client'] },
+    { id: 'budgets', label: 'Orçamentos', icon: <FileText size={18} />, roles: ['super_admin', 'admin', 'collaborator', 'client'], badge: budgetCount > 0 ? budgetCount : undefined },
+    { id: 'chat', label: 'Chat da equipa', icon: <MessageCircle size={18} />, roles: ['super_admin', 'admin', 'collaborator', 'client'], badge: 3 },
+    { id: 'companies', label: role === 'client' ? 'A minha empresa' : 'Empresas', icon: <Building2 size={18} />, roles: ['super_admin', 'admin', 'collaborator', 'client'] },
+    { id: 'catalog', label: 'Catálogo', icon: <BookOpen size={18} />, roles: ['super_admin', 'admin', 'collaborator'] },
+    { id: 'reports', label: 'Relatórios', icon: <BarChart3 size={18} />, roles: ['super_admin', 'admin', 'client'] },
+    { id: 'team', label: role === 'client' ? 'A minha equipa' : 'Equipa', icon: <Users size={18} />, roles: ['super_admin', 'admin', 'client'] },
+    { id: 'settings', label: 'Definições', icon: <Settings size={18} />, roles: ['super_admin', 'admin', 'collaborator', 'client'] },
   ];
 
   const visible = NAV.filter((n) => n.roles.includes(role));

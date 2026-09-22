@@ -152,7 +152,14 @@ function AppInner() {
   }
 
   function approveBudget(budget: Budget) {
-    if (!profile || !['admin', 'client'].includes(profile.role)) return;
+    if (!profile || !['super_admin', 'admin', 'client'].includes(profile.role)) {
+      notify('Apenas avaliadores definidos podem validar orçamentos.', 'error');
+      return;
+    }
+    if (budget.approver_ids?.length && !budget.approver_ids.includes(profile.id) && profile.role !== 'super_admin') {
+      notify('Não tem permissão para validar este orçamento.', 'error');
+      return;
+    }
     const audit: BudgetAuditEntry = {
       id: newId(), action: 'aprovado', actor_id: profile.id, actor_name: profile.full_name,
       note: 'Orçamento validado pelo avaliador e entregue ao comercial.', created_at: new Date().toISOString(),
