@@ -186,7 +186,7 @@ const ConfirmDialog: React.FC<{
 }> = ({ open, title, message, onConfirm, onCancel }) => {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-none">
       <div className="bg-white rounded-2xl shadow-xl p-6 w-96 space-y-4">
         <h3 className="text-lg font-semibold text-slate-800">{title}</h3>
         <p className="text-sm text-slate-600">{message}</p>
@@ -229,7 +229,7 @@ const QuickViewSlideOver: React.FC<{ item: CatalogItem | null; onClose: () => vo
   if (!item) return null;
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
-      <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-none" onClick={onClose} />
       <div className="relative w-full max-w-md bg-white shadow-xl p-6 space-y-4 overflow-y-auto animate-slide-left">
         <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><X size={20} /></button>
         <h2 className="text-xl font-bold text-slate-800">{item.code}</h2>
@@ -735,7 +735,7 @@ export function CatalogView() {
 
   // ========== RENDER ==========
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="catalog-page min-h-screen bg-[#f7f9fc]">
       {/* Cabeçalho */}
       <div className="bg-[#0a1a2f] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">

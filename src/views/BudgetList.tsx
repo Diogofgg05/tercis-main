@@ -268,7 +268,7 @@ const Modal: React.FC<{ open: boolean; onClose: () => void; children: React.Reac
         className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className="relative z-10 w-full max-w-[39.6rem] bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-slate-900/20 ring-1 ring-slate-900/5 overflow-hidden">
+      <div className="relative z-10 w-full max-w-[39.6rem] bg-white/95 backdrop-blur-none rounded-2xl shadow-2xl shadow-slate-900/20 ring-1 ring-slate-900/5 overflow-hidden">
         {children}
       </div>
     </div>
@@ -582,7 +582,7 @@ const BudgetListContent: React.FC<BudgetListProps> = ({ onNew, budgets: initialB
   if (!budgets) return <div className="p-6">Erro ao carregar dados.</div>;
 
   return (
-    <div className="p-6 sm:p-8 space-y-5 max-w-7xl mx-auto" style={{ zoom: 1.1 }}>
+    <div className="budgets-page p-6 sm:p-8 space-y-5 max-w-7xl mx-auto">
       {/* Cabeçalho */}
       <div className="flex items-start justify-between gap-4">
         <div>
