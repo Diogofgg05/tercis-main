@@ -127,7 +127,7 @@ interface StatCardProps {
 }
 
 const StatCard: React.FC<StatCardProps> = React.memo(({ icon, label, value, sub, trend, color, gradient }) => (
-  <div className="relative overflow-hidden rounded-2xl p-5 border border-slate-200/80 bg-white/80 backdrop-blur-md shadow-md hover:shadow-xl transition-all duration-300 group">
+  <div className="dashboard-stat group">
     <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 ${gradient || ''}`} />
     <div className="relative z-10">
       <div className="flex items-start justify-between mb-3">
@@ -310,7 +310,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ budgets: propBudgets, comp
 
   // ─── Visão Admin ─────────────────────────────────────────────────
   return (
-  <div className="workspace-page min-h-screen max-w-full bg-slate-50 p-4 text-slate-900 md:p-8 space-y-6">
+  <div className="workspace-page dashboard-page min-h-screen max-w-full bg-slate-50 p-4 text-slate-900 md:p-8 space-y-6">
   {/* Cabeçalho executivo */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">

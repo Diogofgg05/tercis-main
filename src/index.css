@@ -153,6 +153,37 @@
   50% { opacity:0.6; }
 }
 
+/* Tercis workspace system v2: editorial, operational, no card clutter */
+:root { --ink: #101828; --muted: #667085; --line: #e4e7ec; --accent: #f97316; --accent-soft: #fff7ed; }
+body { background: #f8fafc; color: var(--ink); }
+.backdrop-blur-sm, .backdrop-blur-md, .backdrop-blur-lg, .backdrop-blur-xl { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.dashboard-stat { position: relative; overflow: hidden; min-height: 148px; padding: 1.25rem 1.35rem; background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 4px; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+.dashboard-stat:hover { transform: translateY(-3px); border-color: #f4b183; box-shadow: 0 14px 28px rgba(16,24,40,.08); }
+.dashboard-stat .relative { position: relative; z-index: 1; }
+.dashboard-stat .absolute { opacity: .04 !important; }
+.dashboard-stat [class*="rounded-xl"] { border-radius: 6px !important; box-shadow: none !important; }
+.dashboard-stat [class*="rounded-full"] { border-radius: 999px !important; }
+.dashboard-stat .text-xs { color: var(--muted); }
+.dashboard-stat .text-2xl { color: var(--ink); }
+/* Dashboard sections use ruled surfaces instead of floating cards */
+.dashboard-page .bg-white\/70, .dashboard-page .bg-white\/80, .dashboard-page .bg-white { background: #fff !important; box-shadow: none !important; border-radius: 4px !important; border-color: var(--line) !important; }
+.dashboard-page .rounded-2xl { border-radius: 4px !important; }
+/* Team and company workspaces: rows are the primary visual unit */
+.workspace-page .grid > button, .workspace-page .grid > div { border-radius: 4px !important; box-shadow: none !important; background: #fff !important; }
+.workspace-page .grid > button:hover, .workspace-page .grid > div:hover { transform: translateX(3px); box-shadow: none !important; }
+.workspace-page .overflow-hidden.rounded-2xl { border-radius: 4px !important; box-shadow: none !important; }
+.workspace-page .overflow-hidden.rounded-2xl > div { border-radius: 0 !important; }
+.workspace-page .rounded-xl, .workspace-page .rounded-2xl { border-radius: 4px !important; }
+.workspace-page .shadow-sm, .workspace-page .shadow-md, .workspace-page .shadow-lg, .workspace-page .shadow-xl { box-shadow: none !important; }
+.workspace-page input, .workspace-page select { border-radius: 4px !important; background: #fff !important; }
+.workspace-page button { border-radius: 4px; }
+.workspace-page .text-slate-400, .workspace-page .text-slate-500 { color: #667085 !important; }
+.workspace-page .text-blue-600, .workspace-page .text-blue-700 { color: #c2410c !important; }
+.workspace-page .bg-blue-50 { background: #fff7ed !important; }
+/* Make icon/text contrast explicit on pale surfaces */
+.text-slate-400 svg, .text-slate-500 svg { color: currentColor; }
+.bg-white .text-white, .bg-slate-50 .text-white { color: var(--ink) !important; }
+
 /* Recharts overrides */
 .recharts-tooltip-wrapper { outline: none !important; }
 .recharts-default-tooltip {
