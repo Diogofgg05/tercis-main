@@ -914,7 +914,7 @@ export function TeamView() {
   }, []);
 
   return (
-    <div className="p-6 sm:p-8 space-y-6 max-w-7xl mx-auto animate-fade-in">
+    <div className="workspace-page workspace-team p-6 sm:p-8 space-y-6 max-w-7xl mx-auto animate-fade-in">
       <section className="relative overflow-hidden rounded-[2rem] bg-slate-950 px-6 py-7 text-white shadow-xl shadow-slate-900/10 sm:px-8">
         <div className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-orange-400/20 blur-3xl" />
         <div className="relative flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
