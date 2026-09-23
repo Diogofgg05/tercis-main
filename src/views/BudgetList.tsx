@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback, useRef, useEffect } from 'react';
+import type { Budget, BudgetItem, Company, Profile, BudgetStatus } from '../types';
 import {
   Plus, Search, FileText, Trash2, Edit3, Download,
   FileSpreadsheet, Copy, Filter, ChevronUp, ChevronDown,
@@ -39,43 +40,6 @@ class ErrorBoundary extends React.Component<
   }
 }
 
-// ============================================================
-// TIPOS
-// ============================================================
-type BudgetStatus = 'rascunho' | 'em_revisao' | 'enviado' | 'aprovado' | 'rejeitado' | 'expirado' | 'em_execucao' | 'concluido';
-
-interface BudgetItem {
-  unit_cost: number;
-  margin: number;
-  discount: number;
-  quantity: number;
-}
-
-interface Company {
-  id: string;
-  name: string;
-}
-
-interface Profile {
-  id: string;
-  full_name: string;
-  email?: string;
-}
-
-interface Budget {
-  id: string;
-  ref: string;
-  name: string;
-  company?: Company;
-  company_id: string;
-  sector?: string;
-  assignee?: Profile;
-  assigned_to?: string | null;
-  status: BudgetStatus;
-  items: BudgetItem[];
-  date: string;
-  valid_until: string;
-}
 
 // ============================================================
 // HELPERS
@@ -143,7 +107,7 @@ const StatusBadge: React.FC<{ status: BudgetStatus }> = ({ status }) => {
 // EXPORTAÇÕES (mock)
 // ============================================================
 function exportToPDF(budget: Budget): void {
-  const content = `Orçamento: ${budget.ref} - ${budget.name}\nCliente: ${budget.company?.name || 'N/A'}\nTotal: ${formatCurrency(grandTotal(budget.items))}\nEstado: ${STATUS_LABELS[budget.status] || budget.status}\nData: ${budget.date}`;
+  const content = `Orçamento: ${budget.ref} - ${budget.name}\nCliente: ${budget.company?.name || 'N/A'}\nTotal: ${formatCurrency(grandTotal(budget.items || []))}\nEstado: ${STATUS_LABELS[budget.status] || budget.status}\nData: ${budget.date}`;
   const blob = new Blob([content], { type: 'application/pdf' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -156,7 +120,7 @@ function exportToPDF(budget: Budget): void {
 function exportToExcel(budget: Budget): void {
   const rows = [
     ['Ref', 'Nome', 'Cliente', 'Estado', 'Total', 'Data'],
-    [budget.ref, budget.name, budget.company?.name || '', STATUS_LABELS[budget.status] || budget.status, formatCurrency(grandTotal(budget.items)), budget.date],
+    [budget.ref, budget.name, budget.company?.name || '', STATUS_LABELS[budget.status] || budget.status, formatCurrency(grandTotal(budget.items || [])), budget.date],
   ];
   const csv = rows.map(r => r.map(v => `"${v}"`).join(',')).join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -456,8 +420,13 @@ const StatCard: React.FC<{ icon: React.ReactNode; bg: string; label: string; val
 interface BudgetListProps {
   onNew?: () => void;
   budgets?: Budget[];
+  companies?: Company[];
+  team?: Profile[];
   onOpen?: (budget: Budget) => void;
   onApprove?: (budget: Budget) => void;
+  onEdit?: (budget: Budget) => void;
+  onDelete?: (id: string) => void;
+  onDuplicate?: (budget: Budget) => void;
 }
 
 const BudgetListContent: React.FC<BudgetListProps> = ({ onNew, budgets: initialBudgets, onOpen, onApprove }) => {

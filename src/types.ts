@@ -21,18 +21,18 @@ export interface Profile {
 export interface Company {
   id: string;
   name: string;
-  tax_id: string;
-  address: string;
-  city: string;
-  country: string;
-  phone: string;
-  email: string;
-  website: string;
-  sector: string;
-  notes: string;
-  active: boolean;
+  tax_id?: string;
+  address?: string;
+  city?: string;
+  country?: string;
+  phone?: string;
+  email?: string;
+  website?: string;
+  sector?: string;
+  notes?: string;
+  active?: boolean;
   created_by?: string;
-  created_at: string;
+  created_at?: string;
 }
 
 // -------------------------------------------------------
@@ -49,7 +49,7 @@ export interface CatalogItem {
   unit: string;
   unit_cost: number;
   unitCost?: number;
-  supplier: string;
+  supplier?: string;
   is_custom?: boolean;
   active?: boolean;
   manufacturer?: string;
@@ -108,6 +108,7 @@ export interface BudgetItem {
   sector: string;
   unit: string;
   unit_cost: number;
+  unit_price?: number;
   quantity: number;
   margin: number;
   discount: number;
@@ -119,6 +120,7 @@ export interface CalculatedItem extends BudgetItem {
   pvp: number;
   finalPrice: number;
   subtotal: number;
+  totalPrice?: number;
 }
 
 export interface Budget {

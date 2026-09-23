@@ -34,7 +34,7 @@ export async function fetchSupplierItems(supplierId: string): Promise<CatalogIte
 
   // Simulate price update: return items with slight price variation (+/- 5%)
   const items = ALL_CATALOG_ITEMS.filter(
-    (item) => item.supplier.toLowerCase().replace(/\s/g, '').includes(supplierId.replace(/\s/g, ''))
+    (item) => (item.supplier ?? '').toLowerCase().replace(/\s/g, '').includes(supplierId.replace(/\s/g, ''))
       || item.brand.toLowerCase().replace(/\s/g, '').includes(supplierId.replace(/\s/g, ''))
   );
 

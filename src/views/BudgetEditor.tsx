@@ -1,55 +1,10 @@
 import React, { useState, useCallback, useMemo, memo, useEffect } from 'react';
+import type { Budget, BudgetItem, BudgetStatus, CatalogItem } from '../types';
 import {
   ArrowLeft, Save, Download, FileSpreadsheet, Plus, Info,
   ChevronDown, ReceiptText, Tag, FileText, Percent, DollarSign,
   CheckCircle2, AlertCircle, Layers, Trash2,
 } from 'lucide-react';
-
-// ----------------------------- TIPOS PRINCIPAIS -----------------------------
-export type BudgetStatus = 'rascunho' | 'enviado' | 'aprovado' | 'rejeitado' | 'em_execucao' | 'concluido';
-
-export interface CatalogItem {
-  code: string;
-  description: string;
-  reference?: string;
-  brand?: string;
-  category?: string;
-  sector?: string;
-  unit: string;
-  unit_cost: number;
-}
-
-export interface BudgetItem extends CatalogItem {
-  id: string;
-  quantity: number;
-  margin: number;
-  discount: number;
-  notes?: string;
-}
-
-export interface Budget {
-  id?: string;
-  ref: string;
-  name: string;
-  sector: string;
-  company_id: string | null;
-  assigned_to: string | null;
-  date: string;
-  valid_until: string;
-  client_contact: string;
-  client_email: string;
-  notes: string;
-  tax_rate: number;
-  include_tax: boolean;
-  status: BudgetStatus;
-  items: BudgetItem[];
-}
-
-export interface CalculatedItem extends BudgetItem {
-  pvp: number;
-  finalPrice: number;
-  totalPrice: number;
-}
 
 // ----------------------------- TIPOS PARA DADOS EXTERNOS (SEM ANY) -----------------------------
 type ExternalCompany = {
@@ -68,6 +23,12 @@ type ExternalTeamMember = {
   name?: string;
   nome?: string;
 };
+
+interface CalculatedItem extends BudgetItem {
+  pvp: number;
+  finalPrice: number;
+  totalPrice: number;
+}
 
 // ----------------------------- DADOS FIXOS DE EXEMPLO -----------------------------
 export const FIXED_COMPANIES = [
@@ -120,25 +81,22 @@ export const SECTORS = [
 ];
 
 export const ALL_CATALOG_ITEMS: CatalogItem[] = [
-  { code: 'DISJ-16A', description: 'Disjuntor 16A', reference: 'D16', brand: 'Schneider', category: 'Proteção', sector: 'eletricidade', unit: 'un', unit_cost: 12.5 },
-  { code: 'LED-10W', description: 'Lâmpada LED 10W', reference: 'L10', brand: 'Philips', category: 'Iluminação', sector: 'iluminacao', unit: 'un', unit_cost: 4.2 },
-  { code: 'CLP-21', description: 'Controlador Lógico', reference: 'CLP21', brand: 'Siemens', category: 'Automação', sector: 'automacao', unit: 'un', unit_cost: 89.9 },
+  { id: 'cat-1', code: 'DISJ-16A', description: 'Disjuntor 16A', reference: 'D16', brand: 'Schneider', category: 'Proteção', sector: 'eletricidade', unit: 'un', unit_cost: 12.5, supplier: 'Schneider' },
+  { id: 'cat-2', code: 'LED-10W', description: 'Lâmpada LED 10W', reference: 'L10', brand: 'Philips', category: 'Iluminação', sector: 'iluminacao', unit: 'un', unit_cost: 4.2, supplier: 'Philips' },
+  { id: 'cat-3', code: 'CLP-21', description: 'Controlador Lógico', reference: 'CLP21', brand: 'Siemens', category: 'Automação', sector: 'automacao', unit: 'un', unit_cost: 89.9, supplier: 'Siemens' },
 ];
 
 // ----------------------------- COMPONENTES AUXILIARES -----------------------------
 const inputCls = "w-full px-3 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-50 transition-all bg-white";
 
 const STATUS_LABELS: Record<BudgetStatus, string> = {
-  rascunho: 'Rascunho',
-  enviado: 'Enviado',
-  aprovado: 'Aprovado',
-  rejeitado: 'Rejeitado',
-  em_execucao: 'Em Execução',
-  concluido: 'Concluído',
+  rascunho: 'Rascunho', em_revisao: 'Em revisão', enviado: 'Enviado', aprovado: 'Aprovado', rejeitado: 'Rejeitado', expirado: 'Expirado', em_execucao: 'Em execução', concluido: 'Concluído',
 };
 
 const STATUS_CONFIG: Record<BudgetStatus, { bg: string; text: string; dot: string }> = {
   rascunho: { bg: 'bg-slate-100', text: 'text-slate-700', dot: 'bg-slate-400' },
+  em_revisao: { bg: 'bg-violet-100', text: 'text-violet-800', dot: 'bg-violet-500' },
+  expirado: { bg: 'bg-orange-100', text: 'text-orange-800', dot: 'bg-orange-500' },
   enviado: { bg: 'bg-blue-100', text: 'text-blue-800', dot: 'bg-blue-500' },
   aprovado: { bg: 'bg-emerald-100', text: 'text-emerald-800', dot: 'bg-emerald-500' },
   rejeitado: { bg: 'bg-red-100', text: 'text-red-800', dot: 'bg-red-500' },

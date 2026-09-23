@@ -243,32 +243,11 @@ function AppInner() {
         {view === 'catalog' && <CatalogView />}
         {view === 'companies' && (
           <CompaniesView
-            companies={companies}
-            budgets={budgets}
-            onRefresh={() => { loadCompanies(); loadBudgets(); }}
           />
         )}
-        {view === 'team' && (
-          <TeamView
-            team={team}
-            budgets={budgets}
-            onRefresh={loadTeam}
-          />
-        )}
-        {view === 'reports' && (
-          <ReportsView
-            budgets={budgets}
-            companies={companies}
-            team={team}
-          />
-        )}
-        {view === 'settings' && (
-          <SettingsView
-            budgets={budgets}
-            companies={companies}
-            team={team}
-          />
-        )}
+        {view === 'team' && <TeamView />}
+        {view === 'reports' && <ReportsView />}
+        {view === 'settings' && <SettingsView />}
         {view === 'chat' && <ChatView />}
       </main>
 
