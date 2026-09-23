@@ -8,6 +8,8 @@ const CFG: Record<BudgetStatus, { label: string; dot: string; base: string }> = 
   rejeitado:   { label:'Rejeitado',   dot:'bg-red-500',    base:'bg-red-50 text-red-700 border-red-200' },
   em_execucao: { label:'Em Execução', dot:'bg-amber-500',  base:'bg-amber-50 text-amber-700 border-amber-200' },
   concluido:   { label:'Concluído',   dot:'bg-teal-500',   base:'bg-teal-50 text-teal-700 border-teal-200' },
+  em_revisao:   { label:'Em revisão',  dot:'bg-violet-500', base:'bg-violet-50 text-violet-700 border-violet-200' },
+  expirado:    { label:'Expirado',    dot:'bg-orange-500', base:'bg-orange-50 text-orange-700 border-orange-200' },
 };
 
 export const ALL_STATUSES = Object.keys(CFG) as BudgetStatus[];

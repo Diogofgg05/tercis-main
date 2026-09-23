@@ -24,6 +24,17 @@ import { calcItem } from './calc';
 // ----------------------------------------------
 function newId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
 
+function readStored<T>(key: string, fallback: T, isValid: (value: unknown) => value is T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return fallback;
+    const parsed: unknown = JSON.parse(raw);
+    return isValid(parsed) ? parsed : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
 function buildRef(count: number): string {
   return `ORC-${new Date().getFullYear()}-${String(count + 1).padStart(3, '0')}`;
 }
@@ -66,13 +77,11 @@ function AppInner() {
 
   // -- Load data ------------------------------
   function loadBudgets() {
-    const saved = localStorage.getItem('tercis_budgets');
-    setBudgets(saved ? JSON.parse(saved) : DEMO_BUDGETS.map(hydrateDemoBudget));
+    setBudgets(readStored<Budget[]>('tercis_budgets', DEMO_BUDGETS.map(hydrateDemoBudget), (value): value is Budget[] => Array.isArray(value)));
   }
 
   function loadCompanies() {
-    const saved = localStorage.getItem('tercis_companies');
-    setCompanies(saved ? JSON.parse(saved) : DEMO_COMPANIES);
+    setCompanies(readStored<Company[]>('tercis_companies', DEMO_COMPANIES, (value): value is Company[] => Array.isArray(value)));
   }
 
   function loadTeam() { setTeam(DEMO_PROFILES); }
