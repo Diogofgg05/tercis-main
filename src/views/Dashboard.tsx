@@ -127,7 +127,7 @@ interface StatCardProps {
 }
 
 const StatCard: React.FC<StatCardProps> = React.memo(({ icon, label, value, sub, trend, color, gradient }) => (
-  <div className="relative overflow-hidden rounded-2xl p-5 border border-slate-200/80 bg-white/80 backdrop-blur-md shadow-md hover:shadow-xl transition-all duration-300 group">
+  <div className="dashboard-stat group">
     <div className={`absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-300 ${gradient || ''}`} />
     <div className="relative z-10">
       <div className="flex items-start justify-between mb-3">
@@ -163,8 +163,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ budgets: propBudgets, comp
   const isAdmin = profile?.role === 'admin' || !profile?.role;
   const isClient = profile?.role === 'client';
 
-  const budgets = propBudgets && propBudgets.length > 0 ? propBudgets : MOCK_BUDGETS;
-  const companies = propCompanies && propCompanies.length > 0 ? propCompanies : MOCK_COMPANIES;
+  const budgets = propBudgets ?? [];
+  const companies = propCompanies ?? [];
 
   const filteredBudgets = useMemo(() => {
     if (isAdmin || !profile) return budgets;
@@ -263,7 +263,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ budgets: propBudgets, comp
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-black text-slate-900">{greeting}, {profile?.full_name?.split(' ')[0] || 'utilizador'}</h1>
-            <p className="text-slate-500 text-sm mt-0.5">Os seus orçamentos estão aqui</p>
+            <p className="text-slate-500 text-sm mt-0.5">Acompanhe a operação da sua empresa num só lugar</p>
           </div>
           <button onClick={onNew} className="btn-primary">
             <Plus size={16} />
@@ -310,8 +310,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ budgets: propBudgets, comp
 
   // ─── Visão Admin ─────────────────────────────────────────────────
   return (
-    <div className="p-4 md:p-8 space-y-6 max-w-full bg-gradient-to-br from-slate-50 via-white to-blue-50/30 min-h-screen">
-      {/* Cabeçalho */}
+  <div className="workspace-page dashboard-page min-h-screen max-w-full bg-slate-50 p-4 text-slate-900 md:p-8 space-y-6">
+  {/* Cabeçalho executivo */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div>

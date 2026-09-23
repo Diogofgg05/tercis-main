@@ -251,7 +251,18 @@ export function CompaniesView() {
   };
 
   return (
-    <div className="p-8 space-y-5 max-w-7xl">
+    <div className="workspace-page workspace-companies p-6 sm:p-8 space-y-5 max-w-7xl mx-auto animate-fade-in">
+      <section className="relative overflow-hidden rounded-[2rem] bg-slate-950 px-6 py-7 text-white shadow-xl shadow-slate-900/10 sm:px-8">
+        <div className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-orange-400/20 blur-3xl" />
+        <div className="relative flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">Workspace / Clientes</p>
+            <h1 className="text-3xl font-black tracking-tight">Empresas com contexto comercial.</h1>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-slate-300">Centralize relações, volume e histórico para transformar cada oportunidade num próximo passo claro.</p>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 backdrop-blur-sm"><p className="text-[11px] uppercase tracking-widest text-slate-300">Carteira ativa</p><p className="mt-1 text-2xl font-black">{companies.length}<span className="ml-1 text-sm font-medium text-orange-300">contas</span></p></div>
+        </div>
+      </section>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-black text-slate-900 tracking-tight">Empresas</h1>
@@ -311,7 +322,7 @@ export function CompaniesView() {
           <p className="text-slate-500 font-medium text-sm">Nenhuma empresa encontrada</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm divide-y divide-slate-100">
           {filtered.map((company, idx) => {
             const cBudgets = budgetsByCompany[company.id] || [];
             const val = companyValues[company.id] || 0;
@@ -322,7 +333,7 @@ export function CompaniesView() {
               <button
                 key={company.id}
                 onClick={() => { setSelectedCompany(company); setDetailOpen(true); }}
-                className="p-5 rounded-2xl bg-white border border-slate-100 hover:border-blue-200 hover:shadow-md transition-all text-left group"
+                className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-orange-50/50 group"
               >
                 <div className="flex items-start gap-3 mb-4">
                   <div

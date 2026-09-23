@@ -371,7 +371,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
     <>
       <div
         onClick={() => onOpenDetail(m.id)}
-        className={`relative group bg-white rounded-2xl border p-5 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 cursor-pointer ${
+        className={`relative group grid grid-cols-[auto_1fr] items-center gap-4 bg-white px-5 py-4 transition-colors duration-200 hover:bg-blue-50/40 cursor-pointer ${
           !m.active
             ? 'opacity-60 border-slate-200 bg-slate-50/50'
             : 'border-slate-100 hover:border-blue-200 hover:ring-2 hover:ring-blue-50'
@@ -914,7 +914,21 @@ export function TeamView() {
   }, []);
 
   return (
-    <div className="p-6 sm:p-8 space-y-6 max-w-7xl mx-auto">
+    <div className="workspace-page workspace-team p-6 sm:p-8 space-y-6 max-w-7xl mx-auto animate-fade-in">
+      <section className="relative overflow-hidden rounded-[2rem] bg-slate-950 px-6 py-7 text-white shadow-xl shadow-slate-900/10 sm:px-8">
+        <div className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-orange-400/20 blur-3xl" />
+        <div className="relative flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.22em] text-orange-300">Workspace / Pessoas</p>
+            <h1 className="text-3xl font-black tracking-tight">A equipa por trás de cada orçamento.</h1>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-slate-300">Dê contexto, responsabilidade e velocidade a cada pessoa que participa no ciclo comercial.</p>
+          </div>
+          <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-3 backdrop-blur-sm">
+            <div className="flex -space-x-2"><span className="flex size-8 items-center justify-center rounded-full border-2 border-slate-950 bg-orange-400 text-[10px] font-black text-slate-950">CS</span><span className="flex size-8 items-center justify-center rounded-full border-2 border-slate-950 bg-white text-[10px] font-black text-slate-950">MO</span></div>
+            <div><p className="text-xs font-bold">Colaboração ativa</p><p className="text-[11px] text-slate-300">Permissões por função</p></div>
+          </div>
+        </div>
+      </section>
       {/* Toasts */}
       <div className="fixed bottom-6 right-6 z-50 space-y-2">
         {toasts.map((toast) => (
@@ -1030,8 +1044,8 @@ export function TeamView() {
         </div>
       </div>
 
-      {/* Grid de membros */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      {/* Lista operacional de membros */}
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm divide-y divide-slate-100">
         {loading ? (
           Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
         ) : memberData.length === 0 ? (

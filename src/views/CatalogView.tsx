@@ -8,7 +8,6 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../auth/AuthContext';
 import { Modal } from '../components/Modal';
-import { supabase } from '../lib/supabase';
 import { ALL_CATALOG_ITEMS, SECTORS } from '../data/catalog';
 import type { CatalogItem } from '../types';
 
@@ -187,7 +186,7 @@ const ConfirmDialog: React.FC<{
 }> = ({ open, title, message, onConfirm, onCancel }) => {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-none">
       <div className="bg-white rounded-2xl shadow-xl p-6 w-96 space-y-4">
         <h3 className="text-lg font-semibold text-slate-800">{title}</h3>
         <p className="text-sm text-slate-600">{message}</p>
@@ -230,7 +229,7 @@ const QuickViewSlideOver: React.FC<{ item: CatalogItem | null; onClose: () => vo
   if (!item) return null;
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
-      <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-none" onClick={onClose} />
       <div className="relative w-full max-w-md bg-white shadow-xl p-6 space-y-4 overflow-y-auto animate-slide-left">
         <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><X size={20} /></button>
         <h2 className="text-xl font-bold text-slate-800">{item.code}</h2>
@@ -603,7 +602,7 @@ export function CatalogView() {
       notes: formData.notes,
       is_custom: true,
     };
-    await supabase.from('custom_catalog_items').insert(newItem);
+    localStorage.setItem('tercis_catalog_custom', JSON.stringify(newItem));
     addCustomItems([newItem]);
     addToast('success', 'Componente adicionado.');
     setFormData(emptyForm);
@@ -643,7 +642,7 @@ export function CatalogView() {
       manufacturer: '', model: '', voltage: '', current: '', power: '',
       dimensions: '', weight: '', certifications: '', stock: undefined, location: '', notes: '',
     }));
-    await supabase.from('custom_catalog_items').insert(newItems);
+    localStorage.setItem('tercis_catalog_custom', JSON.stringify(newItems));
     addCustomItems(newItems);
     addToast('success', `${newItems.length} importados.`);
     setSelectedExt(new Set()); setExtResults([]); setExtQuery('');
@@ -722,14 +721,12 @@ export function CatalogView() {
   }, [filteredItems, addToast]);
 
   const handleDeleteItem = async (id: string) => {
-    await supabase.from('custom_catalog_items').delete().eq('id', id);
     removeCustomItems([id]);
     addToast('success', 'Item removido.');
   };
 
   const handleBatchDelete = async () => {
     const ids = Array.from(selectedItems);
-    await supabase.from('custom_catalog_items').delete().in('id', ids);
     removeCustomItems(ids);
     setSelectedItems(new Set());
     setConfirmBatchDelete(false);
@@ -738,7 +735,7 @@ export function CatalogView() {
 
   // ========== RENDER ==========
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="catalog-page min-h-screen bg-[#f7f9fc]">
       {/* Cabeçalho */}
       <div className="bg-[#0a1a2f] text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">

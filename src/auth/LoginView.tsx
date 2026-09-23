@@ -33,25 +33,23 @@ export function LoginView() {
   return (
     <div className="min-h-screen flex bg-slate-950">
       {/* Left panel */}
-      <div className="hidden lg:flex lg:w-[55%] flex-col justify-between p-14 bg-gradient-to-br from-blue-900 via-slate-900 to-slate-950">
+      <div className="hidden lg:flex lg:w-[55%] flex-col justify-between p-14 bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+          <div className="w-10 h-10 bg-cyan-400 rounded-xl flex items-center justify-center shadow-lg">
             <Zap size={20} className="text-white" />
           </div>
           <div>
-            <p className="text-white font-bold text-lg">QuadroElétrico</p>
-            <p className="text-blue-400 text-xs">Plataforma de Orçamentos</p>
+            <p className="text-white font-bold text-lg">tercis</p>
+            <p className="text-cyan-300 text-xs">Operations OS</p>
           </div>
         </div>
 
         <div className="space-y-6">
           <h1 className="text-5xl font-black text-white leading-tight tracking-tight">
-            Orçamentos<br />profissionais<br /><span className="text-blue-400">sem limites</span>
+            A empresa toda<br />em <span className="text-cyan-300">sintonia</span>
           </h1>
           <p className="text-slate-400 text-lg leading-relaxed max-w-md">
-            Gestão completa de orçamentos para eletricidade, automação, HVAC,
-            telecomunicações e muito mais. Com catálogo de 200+ componentes de
-            40 fornecedores líderes.
+            A tercis liga administração, empresas e equipas numa operação clara. Automatize tarefas, acompanhe aprovações e mantenha tudo no ritmo certo.
           </p>
           <div className="grid grid-cols-2 gap-4 max-w-sm">
             {[
@@ -68,7 +66,7 @@ export function LoginView() {
           </div>
         </div>
 
-        <p className="text-slate-600 text-xs">© 2026 QuadroElétrico. Todos os direitos reservados.</p>
+        <p className="text-slate-600 text-xs">© 2026 tercis. Operações mais simples, equipas mais fortes.</p>
       </div>
 
       {/* Right panel: form */}
@@ -76,10 +74,10 @@ export function LoginView() {
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="flex items-center gap-2.5 mb-10 lg:hidden">
-            <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
-              <Zap size={18} className="text-white" />
+            <div className="w-9 h-9 bg-cyan-400 rounded-xl flex items-center justify-center">
+              <Zap size={18} className="text-slate-950" fill="currentColor" />
             </div>
-            <p className="text-white font-bold">QuadroElétrico</p>
+            <p className="text-white font-bold">tercis</p>
           </div>
 
           <div className="mb-8">
@@ -119,7 +117,7 @@ export function LoginView() {
                 placeholder="Senha"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 rounded-xl pl-10 pr-10 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+                className="w-full bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 rounded-xl pl-10 pr-10 py-3 text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all"
               />
               <button
                 type="button"
@@ -145,7 +143,7 @@ export function LoginView() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-colors text-sm shadow-lg shadow-blue-900/30"
+              className="w-full bg-cyan-400 hover:bg-cyan-300 disabled:opacity-50 text-white font-bold py-3 rounded-xl transition-colors text-sm shadow-lg shadow-cyan-900/30"
             >
               {loading ? 'A processar...' : mode === 'login' ? 'Iniciar Sessão' : 'Criar Conta'}
             </button>
@@ -157,7 +155,7 @@ export function LoginView() {
             </span>
             <button
               onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); setSuccess(''); }}
-              className="text-blue-400 hover:text-blue-300 text-sm font-semibold transition-colors"
+              className="text-cyan-300 hover:text-cyan-200 text-sm font-semibold transition-colors"
             >
               {mode === 'login' ? 'Registar' : 'Iniciar sessão'}
             </button>
@@ -165,7 +163,7 @@ export function LoginView() {
 
           <div className="mt-8 p-4 bg-slate-900 border border-slate-800 rounded-xl">
             <p className="text-slate-500 text-xs text-center">
-              O primeiro utilizador a registar-se torna-se automaticamente <strong className="text-slate-400">Administrador</strong>
+              Cada nova conta começa como <strong className="text-slate-400">Admin da empresa</strong>. Depois, pode convidar e gerir os seus colaboradores.
             </p>
           </div>
         </div>
@@ -187,7 +185,7 @@ function Field({
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all"
+        className="w-full bg-slate-800 border border-slate-700 text-white placeholder:text-slate-500 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all"
       />
     </div>
   );

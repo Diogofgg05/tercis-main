@@ -42,7 +42,7 @@ class ErrorBoundary extends React.Component<
 // ============================================================
 // TIPOS
 // ============================================================
-type BudgetStatus = 'rascunho' | 'enviado' | 'aprovado' | 'rejeitado' | 'em_execucao' | 'concluido';
+type BudgetStatus = 'rascunho' | 'em_revisao' | 'enviado' | 'aprovado' | 'rejeitado' | 'expirado' | 'em_execucao' | 'concluido';
 
 interface BudgetItem {
   unit_cost: number;
@@ -109,19 +109,23 @@ function formatCurrency(val: number): string {
 // ============================================================
 const STATUS_CONFIG: Record<BudgetStatus, { bg: string; text: string; dot: string }> = {
   rascunho: { bg: 'bg-slate-100', text: 'text-slate-600', dot: 'bg-slate-400' },
+  em_revisao: { bg: 'bg-violet-50', text: 'text-violet-700', dot: 'bg-violet-500' },
   enviado: { bg: 'bg-blue-50', text: 'text-blue-700', dot: 'bg-blue-500' },
   aprovado: { bg: 'bg-emerald-50', text: 'text-emerald-700', dot: 'bg-emerald-500' },
   rejeitado: { bg: 'bg-red-50', text: 'text-red-700', dot: 'bg-red-500' },
+  expirado: { bg: 'bg-orange-50', text: 'text-orange-700', dot: 'bg-orange-500' },
   em_execucao: { bg: 'bg-amber-50', text: 'text-amber-700', dot: 'bg-amber-500' },
   concluido: { bg: 'bg-cyan-50', text: 'text-cyan-700', dot: 'bg-cyan-600' },
 };
 
 const STATUS_LABELS: Record<BudgetStatus, string> = {
   rascunho: 'Rascunho',
-  enviado: 'Enviado',
+  em_revisao: 'Em revisão',
+  enviado: 'Enviado ao comercial',
   aprovado: 'Aprovado',
   rejeitado: 'Rejeitado',
-  em_execucao: 'Em Execução',
+  expirado: 'Expirado',
+  em_execucao: 'Em execução',
   concluido: 'Concluído',
 };
 
@@ -264,7 +268,7 @@ const Modal: React.FC<{ open: boolean; onClose: () => void; children: React.Reac
         className="absolute inset-0 bg-slate-900/30 backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className="relative z-10 w-full max-w-[39.6rem] bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl shadow-slate-900/20 ring-1 ring-slate-900/5 overflow-hidden">
+      <div className="relative z-10 w-full max-w-[39.6rem] bg-white/95 backdrop-blur-none rounded-2xl shadow-2xl shadow-slate-900/20 ring-1 ring-slate-900/5 overflow-hidden">
         {children}
       </div>
     </div>
@@ -450,11 +454,14 @@ const StatCard: React.FC<{ icon: React.ReactNode; bg: string; label: string; val
 );
 
 interface BudgetListProps {
-  onNew?: () => void;   // <-- PROP para redirecionar ao editor
+  onNew?: () => void;
+  budgets?: Budget[];
+  onOpen?: (budget: Budget) => void;
+  onApprove?: (budget: Budget) => void;
 }
 
-const BudgetListContent: React.FC<BudgetListProps> = ({ onNew }) => {
-  const [budgets, setBudgets] = useState<Budget[]>(MOCK_BUDGETS);
+const BudgetListContent: React.FC<BudgetListProps> = ({ onNew, budgets: initialBudgets, onOpen, onApprove }) => {
+  const [budgets, setBudgets] = useState<Budget[]>(initialBudgets ?? MOCK_BUDGETS);
   const [editingBudget, setEditingBudget] = useState<Budget | null>(null);
   const isClient = false;
 
@@ -463,6 +470,11 @@ const BudgetListContent: React.FC<BudgetListProps> = ({ onNew }) => {
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
   const [hoveredRow, setHoveredRow] = useState<string | null>(null);
+  const [detailsBudget, setDetailsBudget] = useState<Budget | null>(null);
+
+  useEffect(() => {
+    if (initialBudgets) setBudgets(initialBudgets);
+  }, [initialBudgets]);
 
   const toggleSort = useCallback((field: SortField) => {
     if (sortField === field) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
@@ -541,6 +553,10 @@ const BudgetListContent: React.FC<BudgetListProps> = ({ onNew }) => {
   }, [budgets.length, onNew]);
 
   const handleEdit = useCallback((b: Budget) => setEditingBudget(b), []);
+  const handleRowOpen = useCallback((b: Budget) => {
+    if (onOpen) onOpen(b);
+    else setDetailsBudget(b);
+  }, [onOpen]);
   const handleSaveEdit = useCallback((updated: Budget) => {
     setBudgets(prev => prev.map(b => b.id === updated.id ? updated : b));
     setEditingBudget(null);
@@ -566,7 +582,7 @@ const BudgetListContent: React.FC<BudgetListProps> = ({ onNew }) => {
   if (!budgets) return <div className="p-6">Erro ao carregar dados.</div>;
 
   return (
-    <div className="p-6 sm:p-8 space-y-5 max-w-7xl mx-auto" style={{ zoom: 1.1 }}>
+    <div className="budgets-page p-6 sm:p-8 space-y-5 max-w-7xl mx-auto">
       {/* Cabeçalho */}
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -649,7 +665,7 @@ const BudgetListContent: React.FC<BudgetListProps> = ({ onNew }) => {
                   const expired = validDate && !isNaN(validDate.getTime()) && validDate < new Date() && !['aprovado', 'concluido'].includes(b.status);
                   const isHovered = hoveredRow === b.id;
                   return (
-                    <tr key={b.id} onMouseEnter={() => setHoveredRow(b.id)} onMouseLeave={() => setHoveredRow(null)} className="border-b border-slate-50 hover:bg-blue-50/30 cursor-pointer transition-colors">
+                    <tr key={b.id} onClick={() => handleRowOpen(b)} onMouseEnter={() => setHoveredRow(b.id)} onMouseLeave={() => setHoveredRow(null)} className="border-b border-slate-50 hover:bg-blue-50/30 cursor-pointer transition-colors">
                       <td className="px-4 py-3.5"><span className="font-mono text-[11px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">{b.ref}</span></td>
                       <td className="px-4 py-3.5 font-semibold text-slate-800 max-w-44"><span className="block truncate">{b.name}</span></td>
                       <td className="px-4 py-3.5 text-xs text-slate-600">{b.company?.name ? <span className="flex items-center gap-1.5"><Building2 size={11} className="text-slate-400 flex-shrink-0" /><span className="truncate max-w-28">{b.company.name}</span></span> : <span className="text-slate-300">—</span>}</td>
@@ -663,6 +679,9 @@ const BudgetListContent: React.FC<BudgetListProps> = ({ onNew }) => {
                         <td className="px-4 py-3.5" onClick={e => e.stopPropagation()}>
                           <div className={`flex gap-0.5 justify-center transition-opacity duration-150 ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
                             <ActionBtn icon={<Edit3 size={13} />} title="Editar" onClick={() => handleEdit(b)} />
+                            {onApprove && ['em_revisao', 'aprovado'].includes(b.status) && (
+                              <button type="button" onClick={() => onApprove(b)} title="Validar e entregar ao comercial" className="px-2 py-1 rounded-lg bg-emerald-50 text-emerald-700 text-[10px] font-bold hover:bg-emerald-100">Validar</button>
+                            )}
                             <ActionBtn icon={<Copy size={13} />} title="Duplicar" onClick={() => handleDuplicate(b)} />
                             <ActionBtn icon={<Download size={13} />} title="Exportar PDF" onClick={() => exportToPDF(b)} />
                             <ActionBtn icon={<FileSpreadsheet size={13} />} title="Exportar Excel" onClick={() => exportToExcel(b)} />
@@ -679,6 +698,18 @@ const BudgetListContent: React.FC<BudgetListProps> = ({ onNew }) => {
         )}
       </div>
 
+      {detailsBudget && (
+        <Modal open={true} onClose={() => setDetailsBudget(null)}>
+          <ModalHeader title={`${detailsBudget.ref} · ${detailsBudget.name}`} onClose={() => setDetailsBudget(null)} />
+          <div className="p-6 space-y-4">
+            <div className="flex items-center justify-between"><StatusBadge status={detailsBudget.status} /><span className="font-black text-slate-900">{formatCurrency(grandTotal(detailsBudget.items || []))}</span></div>
+            <div className="grid grid-cols-2 gap-3 text-xs"><div className="rounded-xl bg-slate-50 p-3"><p className="text-slate-400">Cliente</p><p className="font-semibold text-slate-700 mt-1">{detailsBudget.company?.name || 'Sem cliente'}</p></div><div className="rounded-xl bg-slate-50 p-3"><p className="text-slate-400">Validade</p><p className="font-semibold text-slate-700 mt-1">{detailsBudget.valid_until || '—'}</p></div></div>
+            <div className="rounded-xl border border-slate-100 p-4"><p className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Fluxo de validação</p><div className="flex items-center gap-2 text-xs text-slate-600"><span className="size-2 rounded-full bg-violet-500" /> Avaliador definido <ChevronDown size={12} className="rotate-[-90deg] text-slate-300" /><span className="size-2 rounded-full bg-emerald-500" /> Comercial recebe após validação</div></div>
+            {onApprove && ['em_revisao', 'aprovado'].includes(detailsBudget.status) && <button onClick={() => { onApprove(detailsBudget); setDetailsBudget(null); }} className="w-full rounded-xl bg-blue-600 py-3 text-sm font-bold text-white hover:bg-blue-700">Validar e entregar ao comercial</button>}
+          </div>
+        </Modal>
+      )}
+
       {/* Modal de edição */}
       {editingBudget && (
         <BudgetEditModal
@@ -694,10 +725,10 @@ const BudgetListContent: React.FC<BudgetListProps> = ({ onNew }) => {
 // ============================================================
 // Exportação principal
 // ============================================================
-export function BudgetList({ onNew }: { onNew?: () => void }) {
+export function BudgetList({ onNew, budgets, onOpen, onApprove }: BudgetListProps) {
   return (
     <ErrorBoundary>
-      <BudgetListContent onNew={onNew} />
+      <BudgetListContent onNew={onNew} budgets={budgets} onOpen={onOpen} onApprove={onApprove} />
     </ErrorBoundary>
   );
 }
