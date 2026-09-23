@@ -322,7 +322,7 @@ export function CompaniesView() {
           <p className="text-slate-500 font-medium text-sm">Nenhuma empresa encontrada</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm divide-y divide-slate-100">
           {filtered.map((company, idx) => {
             const cBudgets = budgetsByCompany[company.id] || [];
             const val = companyValues[company.id] || 0;
@@ -333,7 +333,7 @@ export function CompaniesView() {
               <button
                 key={company.id}
                 onClick={() => { setSelectedCompany(company); setDetailOpen(true); }}
-                className="p-5 rounded-[1.5rem] bg-white border border-slate-100 hover:border-orange-200 hover:shadow-xl hover:shadow-orange-950/5 hover:-translate-y-0.5 transition-all text-left group"
+                className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-4 px-5 py-4 text-left transition-colors hover:bg-orange-50/50 group"
               >
                 <div className="flex items-start gap-3 mb-4">
                   <div

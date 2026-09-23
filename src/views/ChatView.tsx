@@ -24,7 +24,7 @@ export function ChatView() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f9fc] p-4 md:p-8">
+    <div className="workspace-page min-h-screen bg-slate-50 p-4 text-slate-900 md:p-8">
       <header className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div><p className="label text-blue-600">Colaboração</p><h1 className="section-title">Chat da equipa</h1><p className="mt-1 text-sm text-slate-500">Decisões, revisões e contexto no mesmo lugar que os seus orçamentos.</p></div>
         <div className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700"><Circle size={8} fill="currentColor" /> 4 pessoas online</div>

@@ -310,8 +310,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ budgets: propBudgets, comp
 
   // ─── Visão Admin ─────────────────────────────────────────────────
   return (
-    <div className="p-4 md:p-8 space-y-6 max-w-full bg-gradient-to-br from-slate-50 via-white to-blue-50/30 min-h-screen">
-      {/* Cabeçalho */}
+  <div className="workspace-page min-h-screen max-w-full bg-slate-50 p-4 text-slate-900 md:p-8 space-y-6">
+  {/* Cabeçalho executivo */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div>

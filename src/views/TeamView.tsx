@@ -371,7 +371,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
     <>
       <div
         onClick={() => onOpenDetail(m.id)}
-        className={`relative group bg-white rounded-2xl border p-5 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 cursor-pointer ${
+        className={`relative group grid grid-cols-[auto_1fr] items-center gap-4 bg-white px-5 py-4 transition-colors duration-200 hover:bg-blue-50/40 cursor-pointer ${
           !m.active
             ? 'opacity-60 border-slate-200 bg-slate-50/50'
             : 'border-slate-100 hover:border-blue-200 hover:ring-2 hover:ring-blue-50'
@@ -1044,8 +1044,8 @@ export function TeamView() {
         </div>
       </div>
 
-      {/* Grid de membros */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+      {/* Lista operacional de membros */}
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm divide-y divide-slate-100">
         {loading ? (
           Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
         ) : memberData.length === 0 ? (
