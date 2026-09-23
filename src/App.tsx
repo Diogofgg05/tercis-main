@@ -83,6 +83,11 @@ function AppInner() {
   async function handleSave() {
     if (!activeBudget || !profile) return;
     if (!activeBudget.name.trim()) { notify('Indique uma designação para o orçamento.', 'error'); return; }
+    if (!activeBudget.company_id) { notify('Selecione uma empresa antes de guardar.', 'error'); return; }
+    if (!activeBudget.items?.length) { notify('Adicione pelo menos um componente ao orçamento.', 'error'); return; }
+    if (activeBudget.items.some((item) => !Number.isFinite(item.quantity) || item.quantity <= 0 || !Number.isFinite(item.unit_cost) || item.unit_cost < 0)) {
+      notify('Verifique quantidades e preços das linhas do orçamento.', 'error'); return;
+    }
     setSaving(true);
     try {
       const nextBudget = hydrateDemoBudget({ ...activeBudget, created_by: activeBudget.created_by ?? profile.id, updated_at: new Date().toISOString() });
@@ -152,8 +157,8 @@ function AppInner() {
   }
 
   function approveBudget(budget: Budget) {
-    if (!profile || !['super_admin', 'admin', 'client'].includes(profile.role)) {
-      notify('Apenas avaliadores definidos podem validar orçamentos.', 'error');
+    if (!profile || !['super_admin', 'admin'].includes(profile.role)) {
+      notify('Apenas administradores ou avaliadores definidos podem validar orçamentos.', 'error');
       return;
     }
     if (budget.approver_ids?.length && !budget.approver_ids.includes(profile.id) && profile.role !== 'super_admin') {
@@ -164,8 +169,13 @@ function AppInner() {
       id: newId(), action: 'aprovado', actor_id: profile.id, actor_name: profile.full_name,
       note: 'Orçamento validado pelo avaliador e entregue ao comercial.', created_at: new Date().toISOString(),
     };
+    const commercialAudit: BudgetAuditEntry = {
+      ...audit,
+      id: newId(),
+      action: 'entregue_comercial',
+    };
     const next = budgets.map((item) => item.id === budget.id
-      ? { ...item, status: 'enviado' as BudgetStatus, audit_log: [...(item.audit_log ?? []), audit], updated_at: new Date().toISOString() }
+      ? { ...item, status: 'aprovado' as BudgetStatus, audit_log: [...(item.audit_log ?? []), audit, commercialAudit], updated_at: new Date().toISOString() }
       : item);
     setBudgets(next);
     localStorage.setItem('tercis_budgets', JSON.stringify(next));

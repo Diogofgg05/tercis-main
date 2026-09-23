@@ -154,8 +154,30 @@
 }
 
 /* Tercis workspace system v2: editorial, operational, no card clutter */
-:root { --ink: #101828; --muted: #667085; --line: #e4e7ec; --accent: #f97316; --accent-soft: #fff7ed; }
-body { background: #f8fafc; color: var(--ink); }
+:root {
+  --ink: #101828;
+  --muted: #667085;
+  --line: #e4e7ec;
+  --accent: #f97316;
+  --accent-soft: #fff7ed;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --success: #047857;
+  --warning: #b45309;
+  --danger: #b91c1c;
+  --info: #1d4ed8;
+}
+body { background: var(--surface-muted); color: var(--ink); }
+input, textarea, select { color: var(--ink); background-color: var(--surface); }
+input::placeholder, textarea::placeholder { color: #667085; opacity: 1; }
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 3px solid rgba(249, 115, 22, .35);
+  outline-offset: 2px;
+}
+.text-slate-400 { color: #667085 !important; }
+.text-slate-500 { color: #475467 !important; }
+.disabled\:opacity-30:disabled, .disabled\:opacity-50:disabled { color: #98a2b3; }
+
 .backdrop-blur-sm, .backdrop-blur-md, .backdrop-blur-lg, .backdrop-blur-xl { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
 .dashboard-stat { position: relative; overflow: hidden; min-height: 148px; padding: 1.25rem 1.35rem; background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 4px; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
 .dashboard-stat:hover { transform: translateY(-3px); border-color: #f4b183; box-shadow: 0 14px 28px rgba(16,24,40,.08); }

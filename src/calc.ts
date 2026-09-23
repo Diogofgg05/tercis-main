@@ -2,11 +2,19 @@ import type { BudgetItem, CalculatedItem, Budget } from './types';
 
 type PricedItem = BudgetItem | CalculatedItem;
 
+function money(value: number): number {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+
 export function calcItem(item: BudgetItem): CalculatedItem {
-  const pvp = item.unit_cost * (1 + item.margin / 100);
-  const finalPrice = pvp * (1 - item.discount / 100);
-  const subtotal = finalPrice * item.quantity;
-  return { ...item, pvp, finalPrice, subtotal };
+  const unitCost = Number.isFinite(item.unit_cost) ? Math.max(0, item.unit_cost) : 0;
+  const margin = Number.isFinite(item.margin) ? Math.max(0, item.margin) : 0;
+  const discount = Number.isFinite(item.discount) ? Math.min(100, Math.max(0, item.discount)) : 0;
+  const quantity = Number.isFinite(item.quantity) ? Math.max(0, item.quantity) : 0;
+  const pvp = money(unitCost * (1 + margin / 100));
+  const finalPrice = money(pvp * (1 - discount / 100));
+  const subtotal = money(finalPrice * quantity);
+  return { ...item, quantity, margin, discount, pvp, finalPrice, subtotal };
 }
 
 export function grandTotal(items: PricedItem[]): number {

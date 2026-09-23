@@ -51,6 +51,19 @@ export interface CatalogItem {
   unitCost?: number;
   supplier: string;
   is_custom?: boolean;
+  active?: boolean;
+  manufacturer?: string;
+  model?: string;
+  voltage?: string;
+  current?: string;
+  power?: string;
+  dimensions?: string;
+  weight?: string;
+  certifications?: string;
+  stock?: number;
+  location?: string;
+  notes?: string;
+  updated_at?: string;
 }
 
 // -------------------------------------------------------
